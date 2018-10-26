@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctionExecution.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctionExecution;
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Settings;
+using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
 {
@@ -11,6 +13,9 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
         public static void Main()
         {
             var thisAssembly = typeof(Program).Assembly;
+            InitializationService.AssureServicesAreInitialized(ContainerConfiguration.CreateFromAssembly(thisAssembly));
+            InitializationService.AssureSettingsAreInitialized<AppSettings>("AppSettings", thisAssembly);
+
             Task.Run(
                 async () =>
                 {
@@ -18,9 +23,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
                         service =>
                         {
                             service.DoeSomething();
-                            throw new Exception("Hello Test");
-                        },
-                        thisAssembly);
+                            throw new Exception("Hello Again");
+                        });
                 });
 
             Console.ReadKey();

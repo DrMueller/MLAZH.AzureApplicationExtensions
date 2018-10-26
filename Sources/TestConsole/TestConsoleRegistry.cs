@@ -15,7 +15,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
                     scanner.WithDefaultConventions();
                 });
 
-            For<IApplicationInsightsSettingsProvider>().Use<ApplicationInsightsSettingsProvider>().Singleton();
+            For<IApplicationInsightsSettingsProvider>().Use<SettingsProvider>().Singleton();
         }
     }
 }

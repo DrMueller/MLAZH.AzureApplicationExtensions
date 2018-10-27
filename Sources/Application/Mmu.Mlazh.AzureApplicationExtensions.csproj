@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\ErrorHandling\" />
-    <Folder Include="Infrastructure\Assets\" />
   </ItemGroup>
 
   <ItemGroup>

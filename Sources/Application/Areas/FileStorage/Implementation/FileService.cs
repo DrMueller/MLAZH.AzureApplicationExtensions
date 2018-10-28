@@ -5,7 +5,7 @@ using Microsoft.WindowsAzure.Storage.File;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.FileStorage.Implementation
 {
-    public class FileService : IFileService
+    internal class FileService : IFileService
     {
         public async Task AppendAsync(string text)
         {

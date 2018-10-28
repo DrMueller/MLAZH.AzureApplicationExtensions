@@ -6,22 +6,23 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Service
 {
     internal class TelemetryClientProxy : ITelemetryClientProxy
     {
-        private readonly TelemetryClient _telemtryClient;
-
         public TelemetryClientProxy(IApplicationInsightsInitializationServant initServant)
         {
             initServant.AssureApplictionInsightsIsInitialized();
-            _telemtryClient = new TelemetryClient();
         }
 
         public void TrackEvent(string eventName)
         {
-            _telemtryClient.TrackEvent(eventName);
+            var telemetryClient = new TelemetryClient();
+            telemetryClient.TrackEvent(eventName);
+            telemetryClient.Flush();
         }
 
         public void TrackException(Exception exception)
         {
-            _telemtryClient.TrackException(exception);
+            var telemetryClient = new TelemetryClient();
+            telemetryClient.TrackException(exception);
+            telemetryClient.Flush();
         }
     }
 }

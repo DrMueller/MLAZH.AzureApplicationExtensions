@@ -21,7 +21,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctionExecution
             {
                 Debug.WriteLine(ex.Message);
                 var exceptionHandler = ServiceLocatorSingleton.Instance.GetService<IExceptionHandler>();
-                return exceptionHandler.HandleException(ex);
+                return await exceptionHandler.HandleExceptionAsync(ex);
             }
         }
     }

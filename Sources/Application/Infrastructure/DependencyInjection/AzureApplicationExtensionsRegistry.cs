@@ -4,6 +4,8 @@ using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Se
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services.Implementation;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FileStorage;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FileStorage.Implementation;
 using StructureMap;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.DependencyInjection
@@ -22,6 +24,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.DependencyInjectio
             For<IExceptionHandler>().Use<ExceptionHandler>().Singleton();
             For<IApplicationInsightsInitializationServant>().Use<ApplicationInsightsInitializationServant>().Singleton();
             For<ITelemetryClientProxy>().Use<TelemetryClientProxy>().Singleton();
+            For<IFileService>().Use<FileService>().Singleton();
         }
     }
 }

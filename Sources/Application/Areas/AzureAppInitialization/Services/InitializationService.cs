@@ -16,6 +16,22 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
         private static bool _settingsAreInitialized;
         private static object _settingsLock = new object();
 
+        public static void AssureServicesAreInitialized(ContainerConfiguration containerConfig, Action provideDependencenciesCallback = null)
+        {
+            if (!_servicesAreInitialized)
+            {
+                lock (_servicesLock)
+                {
+                    if (!_servicesAreInitialized)
+                    {
+                        provideDependencenciesCallback?.Invoke();
+                        _container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
+                        _servicesAreInitialized = true;
+                    }
+                }
+            }
+        }
+
         public static void AssureSettingsAreInitialized<TSettings>(string settingsSectionKey, Assembly rootAssembly)
             where TSettings : class, new()
         {
@@ -28,22 +44,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
                         var settings = SettingsFactory.CreateSettings<TSettings>(settingsSectionKey, SettingsBasePath.CreateFromFile(rootAssembly.CodeBase));
                         _container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
                         _settingsAreInitialized = true;
-                    }
-                }
-            }
-        }
-
-        public static void AssureServicesAreInitialized(ContainerConfiguration containerConfig, Action provideDependencenciesCallback = null)
-        {
-            if (!_servicesAreInitialized)
-            {
-                lock (_servicesLock)
-                {
-                    if (!_servicesAreInitialized)
-                    {
-                        provideDependencenciesCallback?.Invoke();
-                        _container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
-                        _servicesAreInitialized = true;
                     }
                 }
             }

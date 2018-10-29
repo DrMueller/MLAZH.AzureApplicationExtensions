@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Services;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctionExecution;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.Context;
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Settings;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;

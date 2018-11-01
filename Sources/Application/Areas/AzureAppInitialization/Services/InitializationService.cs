@@ -17,17 +17,21 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
 
         public static void AssureServicesAreInitialized(ContainerConfiguration containerConfig, Action provideDependencenciesCallback = null)
         {
-            if (!_servicesAreInitialized)
+            if (_servicesAreInitialized)
             {
-                lock (_servicesLock)
+                return;
+            }
+
+            lock (_servicesLock)
+            {
+                if (_servicesAreInitialized)
                 {
-                    if (!_servicesAreInitialized)
-                    {
-                        provideDependencenciesCallback?.Invoke();
-                        _container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
-                        _servicesAreInitialized = true;
-                    }
+                    return;
                 }
+
+                provideDependencenciesCallback?.Invoke();
+                _container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
+                _servicesAreInitialized = true;
             }
         }
 
@@ -37,20 +41,24 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
             Assembly rootAssembly)
             where TSettings : class, new()
         {
-            if (!_settingsAreInitialized)
+            if (_settingsAreInitialized)
             {
-                lock (_settingsLock)
-                {
-                    if (!_settingsAreInitialized)
-                    {
-                        var settings = _container
-                            .GetInstance<ISettingsFactory>()
-                            .CreateSettings<TSettings>(settingsSectionKey, environmentName, rootAssembly.CodeBase);
+                return;
+            }
 
-                        _container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
-                        _settingsAreInitialized = true;
-                    }
+            lock (_settingsLock)
+            {
+                if (_settingsAreInitialized)
+                {
+                    return;
                 }
+
+                var settings = _container
+                    .GetInstance<ISettingsFactory>()
+                    .CreateSettings<TSettings>(settingsSectionKey, environmentName, rootAssembly.CodeBase);
+
+                _container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
+                _settingsAreInitialized = true;
             }
         }
     }

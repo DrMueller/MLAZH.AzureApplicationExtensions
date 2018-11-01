@@ -24,7 +24,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
                     return await AzureFunctionExecutionContext.ExecuteAsync<ITestService>(
                         service =>
                         {
-                            service.DoeSomething();
+                            service.DoSomething();
                             var tra = ServiceLocatorSingleton.Instance.GetService<ITelemetryClientProxy>();
                             tra.TrackEvent("Test 31");
                             tra.TrackEvent("Test 32");

@@ -13,11 +13,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Models
         {
             Guard.StringNotNullOrEmpty(() => message);
             Guard.StringNotNullOrEmpty(() => typeName);
-            Guard.StringNotNullOrEmpty(() => stackTrace);
 
             Message = message;
             TypeName = typeName;
-            StackTrace = stackTrace;
+            StackTrace = stackTrace ?? string.Empty;
         }
 
         public static ServerError CreateFromException(Exception ex)

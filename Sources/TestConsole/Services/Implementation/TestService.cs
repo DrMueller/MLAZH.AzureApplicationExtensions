@@ -2,7 +2,7 @@
 {
     public class TestService : ITestService
     {
-        public void DoeSomething()
+        public void DoSomething()
         {
         }
     }

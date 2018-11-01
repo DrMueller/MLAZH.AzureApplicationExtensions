@@ -16,7 +16,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
         {
             var thisAssembly = typeof(Program).Assembly;
             InitializationService.AssureServicesAreInitialized(ContainerConfiguration.CreateFromAssembly(thisAssembly));
-            InitializationService.AssureSettingsAreInitialized<AppSettings>("AppSettings", thisAssembly);
+            InitializationService.AssureSettingsAreInitialized<AppSettings>("AppSettings", "Development", thisAssembly);
 
             Task.Run(
                 async () =>

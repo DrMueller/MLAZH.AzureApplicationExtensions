@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Mmu.Mlh.NetStandardExtensions.Areas.SettingsProvisioning.Models;
-using Mmu.Mlh.NetStandardExtensions.Areas.SettingsProvisioning.Services;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Services;
+using Mmu.Mlh.SettingsProvisioning.Areas.Factories;
 using StructureMap;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Services
@@ -32,7 +31,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
             }
         }
 
-        public static void AssureSettingsAreInitialized<TSettings>(string settingsSectionKey, Assembly rootAssembly)
+        public static void AssureSettingsAreInitialized<TSettings>(
+            string settingsSectionKey,
+            string environmentName,
+            Assembly rootAssembly)
             where TSettings : class, new()
         {
             if (!_settingsAreInitialized)
@@ -41,7 +43,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
                 {
                     if (!_settingsAreInitialized)
                     {
-                        var settings = SettingsFactory.CreateSettings<TSettings>(settingsSectionKey, SettingsBasePath.CreateFromFile(rootAssembly.CodeBase));
+                        var settings = _container
+                            .GetInstance<ISettingsFactory>()
+                            .CreateSettings<TSettings>(settingsSectionKey, environmentName, rootAssembly.CodeBase);
+
                         _container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
                         _settingsAreInitialized = true;
                     }

@@ -4,6 +4,8 @@ using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Se
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Implementation;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Servants;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Servants.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FileStorage;
@@ -28,6 +30,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.DependencyInjectio
             For<ITelemetryClientProxy>().Use<TelemetryClientProxy>().Singleton();
             For<IFileService>().Use<FileService>().Singleton();
             For<IHttpRequestProxyFactory>().Use<HttpRequestProxyFactory>().Singleton();
+            For<IQueryParametersFactory>().Use<QueryParametersFactory>().Singleton();
         }
     }
 }

@@ -1,21 +1,21 @@
-﻿using Mmu.Mlh.LanguageExtensions.Areas.Types.Maybes;
+﻿using Newtonsoft.Json;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Models
 {
     public class HttpRequestProxy
     {
-        private readonly Maybe<object> _body;
+        private readonly string _jsonBody;
         public QueryParameters QueryParameters { get; }
 
-        public HttpRequestProxy(QueryParameters queryParameters, Maybe<object> body)
+        public HttpRequestProxy(QueryParameters queryParameters, string jsonBody)
         {
             QueryParameters = queryParameters;
-            _body = body;
+            _jsonBody = jsonBody;
         }
 
         public T ReadBody<T>()
         {
-            return _body.Evaluate(actualBody => (T)actualBody, null);
+            return JsonConvert.DeserializeObject<T>(_jsonBody);
         }
     }
 }

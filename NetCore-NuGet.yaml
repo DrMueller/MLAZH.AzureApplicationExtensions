@@ -1,5 +1,9 @@
 name: 2.0$(rev:.r) # build numbering format
 
+parameters:
+  TfsReleaseManagementKey: ''
+  ParentWorkItemId: ''
+
 resources:
 - repo: self
 phases:
@@ -23,7 +27,7 @@ phases:
 
 
   - task: DotNetCoreCLI@2
-    displayName: Build
+    displayName: 'Build - Warnings as Errors'
     inputs:
       projects: '**/*.csproj'
 
@@ -65,15 +69,13 @@ phases:
   dependsOn: Phase_1
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   server: true
-  variables:
-    ParentWorkItemId: '222'
   steps:
   - task: AzureFunction@1
     displayName: 'Create Release Work Item'
     inputs:
       function: 'https://tfsreleasemanagementsystem.azurewebsites.net/api/CreateRelease'
 
-      key: '$(CreateReleaseFunctionKey)'
+      key: '{{ parameters.TfsReleaseManagementKey }}'
 
       headers: |  
        {
@@ -84,6 +86,6 @@ phases:
        {
            "buildId": $(Build.BuildId),
            "buildVersion": "$(Build.BuildNumber)",
-           "parentWorkItemId": $(ParentWorkItemId)
+           "parentWorkItemId": {{ parameters.ParentWorkItemId }}
        }
 

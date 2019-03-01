@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.Context;
@@ -13,6 +11,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Areas.ConsoleCommands
     public class ThrowException : IConsoleCommand
     {
         private readonly IConsoleWriter _consoleWriter;
+        public string Description { get; } = "Throw Exception";
+        public ConsoleKey Key { get; } = ConsoleKey.D3;
 
         public ThrowException(IConsoleWriter consoleWriter)
         {
@@ -27,8 +27,5 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Areas.ConsoleCommands
             var objectResult = (ObjectResult)actionResult;
             _consoleWriter.WriteLine(objectResult.Value.ToString(), null, ConsoleColor.Green);
         }
-
-        public string Description { get; } = "Throw Exception";
-        public ConsoleKey Key { get; } = ConsoleKey.D3;
     }
 }

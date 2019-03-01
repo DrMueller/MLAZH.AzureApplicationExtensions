@@ -63,7 +63,7 @@ phases:
   displayName: Create Release Work Item
 
   dependsOn: Phase_1
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   server: true
   variables:
     ParentWorkItemId: '222'

@@ -2,7 +2,7 @@
 using Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.Settings.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Settings;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Services
+namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.Settings
 {
     public class SettingsProvider : IApplicationInsightsSettingsProvider
     {

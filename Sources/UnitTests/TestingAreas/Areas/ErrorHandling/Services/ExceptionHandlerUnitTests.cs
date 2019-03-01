@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Models;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services.Implementation;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.FileStorage;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -14,45 +13,14 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Erro
     [TestFixture]
     public class ExceptionHandlerUnitTests
     {
-        private Mock<IFileService> _fileServiceMock;
         private ExceptionHandler _sut;
         private Mock<ITelemetryClientProxy> _telemetryClientProxyMock;
 
         [SetUp]
         public void Align()
         {
-            _fileServiceMock = new Mock<IFileService>();
             _telemetryClientProxyMock = new Mock<ITelemetryClientProxy>();
-            _sut = new ExceptionHandler(_telemetryClientProxyMock.Object, _fileServiceMock.Object);
-        }
-
-        [Test]
-        public async Task HandlingException_CallsFileService_Once()
-        {
-            // Arrange
-            var exception = new Exception("Test");
-
-            // Act
-            await _sut.HandleExceptionAsync(exception);
-
-            // Assert
-            _fileServiceMock.Verify(f => f.AppendAsync(It.IsAny<string>()), Times.Once);
-        }
-
-        [Test]
-        public async Task HandlingException_CallsFileService_WithServerError()
-        {
-            // Arrange
-            const string ExceptionMessage = "Test";
-            var exception = new Exception(ExceptionMessage);
-            var serverError = ServerError.CreateFromException(exception);
-            var expectedSerializedServerError = JsonConvert.SerializeObject(serverError);
-
-            // Act
-            await _sut.HandleExceptionAsync(exception);
-
-            // Assert
-            _fileServiceMock.Verify(f => f.AppendAsync(expectedSerializedServerError));
+            _sut = new ExceptionHandler(_telemetryClientProxyMock.Object);
         }
 
         [Test]

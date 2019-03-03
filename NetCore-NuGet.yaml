@@ -1,7 +1,3 @@
-parameters:
-  TfsReleaseManagementKey: ''
-  ParentWorkItemId: ''
-
 name: 2.0$(rev:.r) # build numbering format
 
 resources:
@@ -75,7 +71,7 @@ phases:
     inputs:
       function: 'https://tfsreleasemanagementsystem.azurewebsites.net/api/CreateRelease'
 
-      key: '{{ parameters.TfsReleaseManagementKey }}'
+      key: '$(TfsReleaseManagementKey)'
 
       headers: |  
        {
@@ -86,6 +82,6 @@ phases:
        {
            "buildId": $(Build.BuildId),
            "buildVersion": "$(Build.BuildNumber)",
-           "parentWorkItemId": {{ parameters.ParentWorkItemId }}
+           "parentWorkItemId":$(ParentWorkItemId)
        }
 

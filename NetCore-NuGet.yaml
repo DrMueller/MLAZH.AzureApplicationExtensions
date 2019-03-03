@@ -1,8 +1,8 @@
-name: 2.0$(rev:.r) # build numbering format
-
 parameters:
   TfsReleaseManagementKey: ''
   ParentWorkItemId: ''
+
+name: 2.0$(rev:.r) # build numbering format
 
 resources:
 - repo: self

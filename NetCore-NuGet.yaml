@@ -1,8 +1,9 @@
 name: 2.1$(rev:.r) # build numbering format
 
 variables:
-  buildConfiguration: 'Release'
-  folderToPack: 'Application'
+  BuildConfiguration: 'Release'
+  FolderToPack: 'Application'
+  ParentWorkitemId: 222
 
 resources:
   repositories:
@@ -20,11 +21,12 @@ jobs:
   steps:
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
     parameters:
-      buildConfiguration: $(buildConfiguration)
+      BuildConfiguration: $(BuildConfiguration)
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Pack_And_Publish_To_NuGet.yaml@ALMStuff
     parameters:
-      folderToPack: $(folderToPack)
+      FolderToPack: $(FolderToPack)
 
 - template: AzureDevOps/Templates/JobTemplates/NetCore/Create_AzureDevOps_Release.yaml@ALMStuff
   parameters:
-    dependsOnJobName: 'BuildAndPublishToNuGet'
+    DependsOnJobName: 'BuildAndPublishToNuGet'
+    ParentWorkitemid: 222

@@ -3,6 +3,7 @@ name: 2.1$(rev:.r) # build numbering format
 variables:
   buildConfiguration: 'Release'
   folderToPack: 'Application'
+  jobName: 'BuildAndPublishToNuGet'
 
 resources:
   repositories:
@@ -13,7 +14,7 @@ resources:
     endpoint: GitHub-DrMueller
 
 jobs:
-- job: 'BuildAndPublishToNuGet'
+- job: $(BuildAndPublishToNuGet)
   pool:
     name: 'Hosted VS2017'
   steps:
@@ -23,3 +24,7 @@ jobs:
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Pack_And_Publish_To_NuGet.yaml@ALMStuff
     parameters:
       folderToPack: $(folderToPack)
+
+- template: AzureDevOps/Templates/JobTemplates/NetCore/Create_AzureDevOps_Release.yaml@ALMStuff
+  parameter:
+    dependsOnJobName: $(BuildAndPublishToNuGet)

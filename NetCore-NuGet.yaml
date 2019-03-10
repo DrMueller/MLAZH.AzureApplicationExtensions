@@ -26,5 +26,5 @@ jobs:
       folderToPack: $(folderToPack)
 
 - template: AzureDevOps/Templates/JobTemplates/NetCore/Create_AzureDevOps_Release.yaml@ALMStuff
-  parameter:
+  parameters:
     dependsOnJobName: $(BuildAndPublishToNuGet)

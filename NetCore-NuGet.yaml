@@ -15,7 +15,6 @@ resources:
     ref: refs/heads/master
     endpoint: GitHub-DrMueller
 
-jobs:
 - job: 'BuildAndPublishToNuGet'
   steps:
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff

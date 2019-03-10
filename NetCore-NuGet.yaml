@@ -1,8 +1,5 @@
 name: 2.1$(rev:.r) # build numbering format
 
-queue:
-  name: Hosted VS2017
-
 variables:
   buildConfiguration: 'Release'
   folderToPack: 'Application'
@@ -15,10 +12,15 @@ resources:
     ref: refs/heads/master
     endpoint: GitHub-DrMueller
 
-steps:
+jobs:
+  job: 'BuildAndPublishToNuGet'
+  queue:
+    name: Hosted VS2017
+  steps:
 - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
   parameters:
     buildConfiguration: $(buildConfiguration)
 - template: AzureDevOps/Templates/StepTemplates/NetCore/Pack_And_Publish_To_NuGet.yaml@ALMStuff
   parameters:
     folderToPack: $(folderToPack)
+

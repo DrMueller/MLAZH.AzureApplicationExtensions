@@ -14,10 +14,17 @@ resources:
     endpoint: GitHub-DrMueller
 
 jobs:
-- template: AzureDevOps/Templates/JobTemplates/NetCore/Build_And_Publish_To_NuGet.yaml@ALMStuff
-  parameters:
-    FolderToPack: $(FolderToPack)
-    BuildConfiguration: $(BuildConfiguration)
+- job: 'BuildAndPublishToNuGet'
+  displayName: 'Build and publish to NuGet'
+  pool:
+    name: 'Hosted VS2017'
+  steps:
+  - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
+    parameters:
+      BuildConfiguration: $(BuildConfiguration)
+  - template: AzureDevOps/Templates/StepTemplates/NetCore/Pack_And_Publish_To_NuGet.yaml@ALMStuff
+    parameters:
+      FolderToPack: $(FolderToPack)
 
 - template: AzureDevOps/Templates/JobTemplates/NetCore/Create_AzureDevOps_Release.yaml@ALMStuff
   parameters:

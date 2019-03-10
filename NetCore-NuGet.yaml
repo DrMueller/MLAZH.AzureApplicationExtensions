@@ -4,6 +4,9 @@ variables:
   buildConfiguration: 'Release'
   folderToPack: 'Application'
 
+pool:
+  vmImage: Hosted VS2017
+
 resources:
   repositories:
   - repository: ALMStuff

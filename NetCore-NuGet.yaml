@@ -22,4 +22,4 @@ jobs:
 - template: AzureDevOps/Templates/JobTemplates/NetCore/Create_AzureDevOps_Release.yaml@ALMStuff
   parameters:
     DependsOnJobName: 'BuildAndPublishToNuGet'
-    ParentWorkitemid: 222
+    ParentWorkitemId: $(ParentWorkItemId)

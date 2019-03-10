@@ -1,5 +1,9 @@
 name: 2.1$(rev:.r) # build numbering format
 
+variables:
+  buildConfiguration: 'Release'
+  folderToPack: 'Application'
+
 resources:
   repositories:
   - repository: ALMStuff

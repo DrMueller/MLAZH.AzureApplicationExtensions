@@ -14,6 +14,7 @@ resources:
 
 jobs:
 - job: 'BuildAndPublishToNuGet'
+  displayName: 'Build and publish to NuGet'
   pool:
     name: 'Hosted VS2017'
   steps:

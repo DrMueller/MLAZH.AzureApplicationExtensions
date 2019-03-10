@@ -4,8 +4,6 @@ variables:
   buildConfiguration: 'Release'
   folderToPack: 'Application'
 
-pool:
-  vmImage: Hosted VS2017
 
 resources:
   repositories:
@@ -17,6 +15,8 @@ resources:
 
 jobs:
 - job: 'BuildAndPublishToNuGet'
+  pool:
+    vmImage: Hosted VS2017
   steps:
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
     parameters:

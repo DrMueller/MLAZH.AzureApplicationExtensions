@@ -15,7 +15,7 @@ resources:
 jobs:
 - job: 'BuildAndPublishToNuGet'
   pool:
-    vmImage: 'Hosted VS2017'
+    vmImage: 'vs2017-win2016'
   steps:
   - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
     parameters:

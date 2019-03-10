@@ -5,6 +5,7 @@ queue:
 
 variables:
   buildConfiguration: 'Release'
+  folderToPack: 'Application'
 
 resources:
   repositories:
@@ -18,3 +19,6 @@ steps:
 - template: AzureDevOps/Templates/StepTemplates/NetCore/Initialize_And_Test.yaml@ALMStuff
   parameters:
     buildConfiguration: $(buildConfiguration)
+- template: AzureDevOps/Templates/StepTemplates/NetCore/Pack_And_Publish_To_NuGet.yaml@ALMStuff
+  parameters:
+    folderToPack: $(folderToPack)

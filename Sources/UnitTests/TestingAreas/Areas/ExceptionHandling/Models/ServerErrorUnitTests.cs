@@ -1,8 +1,8 @@
-﻿using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Models;
+﻿using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Models;
 using Mmu.Mlh.TestingExtensions.Areas.ConstructorTesting.Services;
 using NUnit.Framework;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.ErrorHandling.Models
+namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.ExceptionHandling.Models
 {
     [TestFixture]
     public class ServerErrorUnitTests

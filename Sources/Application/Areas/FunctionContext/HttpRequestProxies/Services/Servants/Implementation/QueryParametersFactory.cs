@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Models;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Models;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Servants.Implementation
+namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services.Servants.Implementation
 {
-    internal class QueryParametersFactory : IQueryParametersFactory
+    public class QueryParametersFactory : IQueryParametersFactory
     {
         public QueryParameters CreateFromCollection(IQueryCollection queryCollection)
         {

@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\ErrorHandling\" />
+    <Folder Include="Areas\ExceptionHandling\" />
   </ItemGroup>
 
   <ItemGroup>

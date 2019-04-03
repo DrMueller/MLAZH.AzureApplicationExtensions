@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Http;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Models;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Servants;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Models;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services.Servants;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Services.Implementation
+namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services.Implementation
 {
-    internal class HttpRequestProxyFactory : IHttpRequestProxyFactory
+    public class HttpRequestProxyFactory : IHttpRequestProxyFactory
     {
         private readonly IQueryParametersFactory _queryParametersFactory;
 

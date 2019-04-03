@@ -6,6 +6,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services
 {
     public interface IExceptionHandler
     {
-        Task<IActionResult> HandleExceptionAsync(Exception exception);
+        Task HandleActionExceptionAsync(Exception exception);
+
+        Task<IActionResult> HandleFunctionExceptionAsync(Exception exception);
     }
 }

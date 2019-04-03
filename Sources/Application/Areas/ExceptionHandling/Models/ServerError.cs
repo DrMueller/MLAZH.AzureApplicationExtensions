@@ -1,7 +1,7 @@
 ﻿using System;
 using Mmu.Mlh.LanguageExtensions.Areas.Invariance;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Models
+namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Models
 {
     public class ServerError
     {

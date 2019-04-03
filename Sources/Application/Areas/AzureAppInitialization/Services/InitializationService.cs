@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Services;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Services;
 using Mmu.Mlh.SettingsProvisioning.Areas.Factories;
@@ -9,57 +9,42 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
 {
     public static class InitializationService
     {
-        private static Container _container;
-        private static bool _servicesAreInitialized;
-        private static object _servicesLock = new object();
-        private static bool _settingsAreInitialized;
-        private static object _settingsLock = new object();
-
-        public static void AssureServicesAreInitialized(ContainerConfiguration containerConfig, Action provideDependencenciesCallback = null)
+        public static IAzureFunctionContext Initialize(
+            ContainerConfiguration containerConfig,
+            Action<IContainer> afterInitializationCallback = null,
+            Action provideDependencenciesCallback = null)
         {
-            if (_servicesAreInitialized)
-            {
-                return;
-            }
-
-            lock (_servicesLock)
-            {
-                if (_servicesAreInitialized)
-                {
-                    return;
-                }
-
-                provideDependencenciesCallback?.Invoke();
-                _container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
-                _servicesAreInitialized = true;
-            }
+            var container = InitializeContainer(containerConfig, provideDependencenciesCallback);
+            afterInitializationCallback?.Invoke(container);
+            var context = container.GetInstance<IAzureFunctionContext>();
+            return context;
         }
 
-        public static void AssureSettingsAreInitialized<TSettings>(
+        public static IAzureFunctionContext Initialize<TSettings>(
+            ContainerConfiguration containerConfig,
             string settingsSectionKey,
             string environmentName,
-            Assembly rootAssembly)
+            Action<IContainer> afterInitializationCallback = null,
+            Action provideDependencenciesCallback = null)
             where TSettings : class, new()
         {
-            if (_settingsAreInitialized)
-            {
-                return;
-            }
+            var container = InitializeContainer(containerConfig, provideDependencenciesCallback);
+            var settings = container
+                .GetInstance<ISettingsFactory>()
+                .CreateSettings<TSettings>(settingsSectionKey, environmentName, containerConfig.RootAssembly.CodeBase);
 
-            lock (_settingsLock)
-            {
-                if (_settingsAreInitialized)
-                {
-                    return;
-                }
+            container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
 
-                var settings = _container
-                    .GetInstance<ISettingsFactory>()
-                    .CreateSettings<TSettings>(settingsSectionKey, environmentName, rootAssembly.CodeBase);
+            afterInitializationCallback?.Invoke(container);
+            var context = container.GetInstance<IAzureFunctionContext>();
+            return context;
+        }
 
-                _container.Configure(cfg => cfg.For<TSettings>().Use(settings).Singleton());
-                _settingsAreInitialized = true;
-            }
+        private static IContainer InitializeContainer(ContainerConfiguration containerConfig, Action provideDependencenciesCallback = null)
+        {
+            provideDependencenciesCallback?.Invoke();
+            var container = ContainerInitializationService.CreateInitializedContainer(containerConfig);
+            return container;
         }
     }
 }

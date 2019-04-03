@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Application\Mmu.Mlazh.AzureApplicationExtensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestingAreas\Areas\FunctionContext\" />
+  </ItemGroup>
+
 </Project>

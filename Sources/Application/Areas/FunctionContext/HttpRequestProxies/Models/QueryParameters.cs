@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestProxies.Models
+namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Models
 {
     public class QueryParameters
     {
@@ -11,6 +11,11 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureFunctions.HttpRequestP
         public QueryParameters(Dictionary<string, string> entries)
         {
             _entries = entries;
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return _entries.ContainsKey(key);
         }
     }
 }

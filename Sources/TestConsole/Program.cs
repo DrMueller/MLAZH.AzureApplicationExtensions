@@ -2,7 +2,7 @@
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Settings;
 using Mmu.Mlh.ConsoleExtensions.Areas.Commands.Services;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;
-using Mmu.Mlh.ServiceProvisioning.Areas.Provisioning.Services;
+using StructureMap;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
 {
@@ -11,12 +11,17 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
         public static void Main()
         {
             var thisAssembly = typeof(Program).Assembly;
-            InitializationService.AssureServicesAreInitialized(ContainerConfiguration.CreateFromAssembly(thisAssembly));
-            InitializationService.AssureSettingsAreInitialized<AppSettings>("AppSettings", "Development", thisAssembly);
+            var containerConfig = ContainerConfiguration.CreateFromAssembly(thisAssembly);
 
-            ServiceLocatorSingleton
-                .Instance
-                .GetService<IConsoleCommandsStartupService>()
+            IContainer container = null;
+
+            InitializationService.Initialize<AppSettings>(
+                containerConfig,
+                "AppSettings",
+                "Development",
+                c => container = c);
+
+            container.GetInstance<IConsoleCommandsStartupService>()
                 .Start();
         }
     }

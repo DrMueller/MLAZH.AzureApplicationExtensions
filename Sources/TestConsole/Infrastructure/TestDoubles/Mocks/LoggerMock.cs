@@ -25,4 +25,3 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.TestDo
         }
     }
 }
-

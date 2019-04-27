@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.Logging
 {

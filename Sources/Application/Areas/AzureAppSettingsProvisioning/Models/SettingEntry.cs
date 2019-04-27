@@ -35,11 +35,5 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
                 _keyParts.CreateForNextLevel(),
                 Value);
         }
-
-        //public SettingEntry CreateWithoutNumbersInKey()
-        //{
-        //    // TODO: evtl entfernen
-        //    return new SettingEntry(GetFirstPartKeyWithoutNumbers(), Value);
-        //}
     }
 }

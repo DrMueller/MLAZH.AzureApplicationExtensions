@@ -90,7 +90,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         private void ProcessSettingEntries(SettingEntryContainer settingEntries, object objectToProcess)
         {
             settingEntries
-                .GetSimpleSinglePropertyEntries()
+                .GetSimplePrimitivePropertyEntries()
                 .ForEach(f => ApplyPropertyValue(f, objectToProcess));
 
             settingEntries.GetSimpleArrayPropertyEntries()

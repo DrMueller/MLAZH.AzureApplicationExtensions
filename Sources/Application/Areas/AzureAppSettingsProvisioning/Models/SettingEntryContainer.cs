@@ -11,7 +11,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         public SettingEntryContainer(IReadOnlyCollection<SettingEntry> entries)
         {
             Guard.ObjectNotNull(() => entries);
-
             Entries = entries;
         }
 
@@ -46,12 +45,12 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             return grpedEntries;
         }
 
-        public IReadOnlyCollection<SettingEntry> GetSimpleSinglePropertyEntries()
+        public IReadOnlyCollection<SettingEntry> GetSimplePrimitivePropertyEntries()
         {
             return Entries.Where(f => !f.IsComplex && !f.IsCollection).ToList();
         }
 
-        private IReadOnlyCollection<GroupedSettingEntryContainer> GetArrayComplexEntries()
+        private IEnumerable<GroupedSettingEntryContainer> GetArrayComplexEntries()
         {
             var result = new List<GroupedSettingEntryContainer>();
             var colEntries = Entries.Where(f => f.IsComplex && f.IsCollection).ToList();
@@ -70,7 +69,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             return result;
         }
 
-        private IReadOnlyCollection<GroupedSettingEntryContainer> GetSingleComplexEntries()
+        private IEnumerable<GroupedSettingEntryContainer> GetSingleComplexEntries()
         {
             var complexEntries = Entries.Where(f => f.IsComplex && !f.IsCollection);
             var grpdByPrefix = complexEntries.GroupBy(f => f.FirstKeyPart.Value);

@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Models;
 using Newtonsoft.Json;
 

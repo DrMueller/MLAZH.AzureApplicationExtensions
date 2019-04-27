@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ErrorHandling.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Models;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Models;

@@ -1,4 +1,6 @@
 ﻿using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.ExecutionContexts.Services.Implementation;
+using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.TestDoubles.Mocks;
 using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Settings;
 using Mmu.Mlh.ConsoleExtensions.Areas.Commands.Services;
 using Mmu.Mlh.ServiceProvisioning.Areas.Initialization.Models;
@@ -15,10 +17,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
 
             IContainer container = null;
 
-            InitializationService.Initialize<AppSettings>(
+            InitializationService.Initialize(
                 containerConfig,
-                "AppSettings",
-                "Development",
+                ExecutionContextFactory.CreateDefault(),
+                new LoggerMock(),
                 c => container = c);
 
             container.GetInstance<IConsoleCommandsStartupService>()

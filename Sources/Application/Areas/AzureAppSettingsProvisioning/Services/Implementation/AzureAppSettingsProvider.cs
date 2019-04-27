@@ -96,10 +96,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             settingEntries.GetSimpleArrayPropertyEntries()
                 .ForEach(f => ProcessSimpleArrayEntries(f, objectToProcess));
 
-            settingEntries.GetComplexSingleSettingEntries()
-                .ForEach(f => ProcessComplexEntry(f, objectToProcess));
-
-            settingEntries.GetComplexArraySettingEntries()
+            settingEntries.GetComplexEntries()
                 .ForEach(f => ProcessComplexEntry(f, objectToProcess));
         }
     }

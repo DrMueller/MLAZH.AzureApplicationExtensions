@@ -15,37 +15,13 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             Entries = entries;
         }
 
-
-        public IReadOnlyCollection<GroupedSettingEntryContainer> GetComplexArraySettingEntries()
+        public IReadOnlyCollection<GroupedSettingEntryContainer> GetComplexEntries()
         {
-            var result = new List<GroupedSettingEntryContainer>();
-            var colEntries = Entries.Where(f => f.IsComplex && f.IsCollection).ToList();
-            var grpdByType = colEntries.GroupBy(f => f.FirstKeyPart.GetValueWithoutTrailingNumbers());
-
-            foreach (var typeGrp in grpdByType)
-            {
-                var grpdByNumber = typeGrp.GroupBy(f => f.FirstKeyPart.GetTrailingNumbers());
-
-                foreach (var numGrp in grpdByNumber)
-                {
-                    result.Add(new GroupedSettingEntryContainer(typeGrp.Key, new SettingEntryContainer(numGrp.ToList())));
-                }
-            }
-
-            return result;
-        }
-
-        public IReadOnlyCollection<GroupedSettingEntryContainer> GetComplexSingleSettingEntries()
-        {
-            var complexEntries = Entries.Where(f => f.IsComplex && !f.IsCollection);
-            var grpdByPrefix = complexEntries.GroupBy(f => f.FirstKeyPart.Value);
-
-            var entries = grpdByPrefix.Select(
-                    f =>
-                        new GroupedSettingEntryContainer(f.Key, new SettingEntryContainer(f.ToList())))
+            var result = GetSingleComplexEntries()
+                .Concat(GetArrayComplexEntries())
                 .ToList();
 
-            return entries;
+            return result;
         }
 
         public SettingEntryContainer GetPropertiesByFirstKeyPartWithoutNumber(string firstKeyPart)
@@ -73,6 +49,38 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         public IReadOnlyCollection<SettingEntry> GetSimpleSinglePropertyEntries()
         {
             return Entries.Where(f => !f.IsComplex && !f.IsCollection).ToList();
+        }
+
+        private IReadOnlyCollection<GroupedSettingEntryContainer> GetArrayComplexEntries()
+        {
+            var result = new List<GroupedSettingEntryContainer>();
+            var colEntries = Entries.Where(f => f.IsComplex && f.IsCollection).ToList();
+            var grpdByType = colEntries.GroupBy(f => f.FirstKeyPart.GetValueWithoutTrailingNumbers());
+
+            foreach (var typeGrp in grpdByType)
+            {
+                var grpdByNumber = typeGrp.GroupBy(f => f.FirstKeyPart.GetTrailingNumbers());
+
+                foreach (var numGrp in grpdByNumber)
+                {
+                    result.Add(new GroupedSettingEntryContainer(typeGrp.Key, new SettingEntryContainer(numGrp.ToList())));
+                }
+            }
+
+            return result;
+        }
+
+        private IReadOnlyCollection<GroupedSettingEntryContainer> GetSingleComplexEntries()
+        {
+            var complexEntries = Entries.Where(f => f.IsComplex && !f.IsCollection);
+            var grpdByPrefix = complexEntries.GroupBy(f => f.FirstKeyPart.Value);
+
+            var entries = grpdByPrefix.Select(
+                    f =>
+                        new GroupedSettingEntryContainer(f.Key, new SettingEntryContainer(f.ToList())))
+                .ToList();
+
+            return entries;
         }
     }
 }

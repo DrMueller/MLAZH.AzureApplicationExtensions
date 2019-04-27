@@ -1,6 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Servants;
@@ -22,56 +22,85 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         {
             var settings = new TSettings();
             var settingEntries = _settingEntriesFactory.Create();
-            var mySettingEntries = settingEntries.GetMyProperties(Constants.AzureAppSettingsPrefix);
+            var mySettingEntries = settingEntries.GetPropertiesByFirstKeyPartWithoutNumber(Constants.AzureAppSettingsPrefix);
 
-            ProcessProperty(mySettingEntries, settings);
-
+            ProcessSettingEntries(mySettingEntries, settings);
             return settings;
         }
 
-        private void ApplyPropertyValue(
+        private static void ApplyPropertyValue(
             SettingEntry settingEntry,
             object objectToSet)
         {
             var objectProps = objectToSet.GetType().GetProperties().ToList();
             var propInfo = objectProps.Single(f => f.Name == settingEntry.PropertyName);
-
-            if (!string.IsNullOrEmpty(settingEntry.Value))
-            {
-                var propInfoType = propInfo.PropertyType;
-                object entryValue = settingEntry.Value;
-
-                if (propInfoType != typeof(string))
-                {
-                    var typeConverter = TypeDescriptor.GetConverter(propInfoType);
-                    entryValue = typeConverter.ConvertFromInvariantString(settingEntry.Value);
-                }
-
-                propInfo.SetValue(objectToSet, entryValue);
-            }
+            propInfo.SetValue(objectToSet, settingEntry.ConvertValue(propInfo.PropertyType));
         }
 
-        private void ProcessProperty(SettingEntryContainer settingEntries, object objectToProcess)
+        private static IList AssurePropertyListIsInitialized(string keyPrefix, object objectToProcess)
+        {
+            var propInfo = objectToProcess.GetType().GetProperties().Single(f => f.Name == keyPrefix);
+
+            var existingValue = propInfo.GetValue(objectToProcess);
+            if (existingValue != null)
+            {
+                return (IList)existingValue;
+            }
+
+            var genericType = propInfo.PropertyType.GetGenericArguments()[0];
+            var genericListType = typeof(List<>).MakeGenericType(genericType);
+            var list = (IList)Activator.CreateInstance(genericListType);
+            propInfo.SetValue(objectToProcess, list);
+
+            return list;
+        }
+
+        private static void ProcessSimpleArrayEntries(GroupedSettingEntryContainer entries, object objectToProcess)
+        {
+            var list = AssurePropertyListIsInitialized(entries.Prefix, objectToProcess);
+            var genericType = list.GetType().GetGenericArguments()[0];
+            entries.SettingEntries.Entries.ForEach(f => list.Add(f.ConvertValue(genericType)));
+        }
+
+        private void ProcessComplexEntry(
+            GroupedSettingEntryContainer complexEntry,
+            object objectToProcess)
+        {
+            var objectProps = objectToProcess.GetType().GetProperties().Where(f => f.CanWrite).ToList();
+            var propInfo = objectProps.Single(f => f.Name == complexEntry.Prefix);
+            object propertyInstance;
+
+            if (typeof(IEnumerable).IsAssignableFrom(propInfo.PropertyType))
+            {
+                var genericType = propInfo.PropertyType.GetGenericArguments()[0];
+                propertyInstance = Activator.CreateInstance(genericType);
+                var list = AssurePropertyListIsInitialized(complexEntry.Prefix, objectToProcess);
+                list.Add(propertyInstance);
+            }
+            else
+            {
+                propertyInstance = Activator.CreateInstance(propInfo.PropertyType);
+                propInfo.SetValue(objectToProcess, propertyInstance);
+            }
+
+            var mySettingEntries = complexEntry.SettingEntries.GetPropertiesByFirstKeyPartWithoutNumber(complexEntry.Prefix);
+            ProcessSettingEntries(mySettingEntries, propertyInstance);
+        }
+
+        private void ProcessSettingEntries(SettingEntryContainer settingEntries, object objectToProcess)
         {
             settingEntries
-                .GetSimplePropertyEntries()
+                .GetSimpleSinglePropertyEntries()
                 .ForEach(f => ApplyPropertyValue(f, objectToProcess));
 
-            var complexEntries = settingEntries.GetComplexSettingEntries();
+            settingEntries.GetSimpleArrayPropertyEntries()
+                .ForEach(f => ProcessSimpleArrayEntries(f, objectToProcess));
 
-            if (complexEntries.Any())
-            {
-                var objectProps = objectToProcess.GetType().GetProperties().Where(f => f.CanWrite).ToList();
-                foreach (var complexEntry in complexEntries)
-                {
-                    var propInfo = objectProps.Single(f => f.Name == complexEntry.Prefix);
-                    var propertyInstance = Activator.CreateInstance(propInfo.PropertyType);
-                    propInfo.SetValue(objectToProcess, propertyInstance);
+            settingEntries.GetComplexSingleSettingEntries()
+                .ForEach(f => ProcessComplexEntry(f, objectToProcess));
 
-                    var mySettingEntries = complexEntry.SettingEntries.GetMyProperties(complexEntry.Prefix);
-                    ProcessProperty(mySettingEntries, propertyInstance);
-                }
-            }
+            settingEntries.GetComplexArraySettingEntries()
+                .ForEach(f => ProcessComplexEntry(f, objectToProcess));
         }
     }
 }

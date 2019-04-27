@@ -1,36 +1,45 @@
 ﻿using System;
-using System.Linq;
-using Mmu.Mlh.LanguageExtensions.Areas.Invariance;
+using System.ComponentModel;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models
 {
     public class SettingEntry
     {
-        public bool IsComplex => Key.Contains(".");
-        public string Key { get; }
-
-        public string Prefix
-        {
-            get
-            {
-                if (Key.Contains("."))
-                {
-                    return Key.Substring(0, Key.IndexOf(".", StringComparison.OrdinalIgnoreCase));
-                }
-
-                return string.Empty;
-            }
-        }
-
-        public string PropertyName => Key.Split('.').Last();
+        private readonly KeyPartCollection _keyParts;
+        public KeyPart FirstKeyPart => _keyParts.FirstEntry;
+        public bool IsCollection => _keyParts.FirstEntry.HasTrailingNumber;
+        public bool IsComplex => _keyParts.Count > 1;
+        public string PropertyName => _keyParts.LastEntry.Value;
         public string Value { get; }
 
-        public SettingEntry(string key, string value)
+        public SettingEntry(KeyPartCollection keyParts, string value)
         {
-            Guard.StringNotNullOrEmpty(() => key);
-
-            Key = key;
+            _keyParts = keyParts;
             Value = value;
         }
+
+        public object ConvertValue(Type targetType)
+        {
+            if (targetType == typeof(string))
+            {
+                return Value;
+            }
+
+            var typeConverter = TypeDescriptor.GetConverter(targetType);
+            return typeConverter.ConvertFromInvariantString(Value);
+        }
+
+        public SettingEntry CreateNextKeyPartLevelEntry()
+        {
+            return new SettingEntry(
+                _keyParts.CreateForNextLevel(),
+                Value);
+        }
+
+        //public SettingEntry CreateWithoutNumbersInKey()
+        //{
+        //    // TODO: evtl entfernen
+        //    return new SettingEntry(GetFirstPartKeyWithoutNumbers(), Value);
+        //}
     }
 }

@@ -10,8 +10,11 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Azur
         internal static SettingEntry Create(object value, params string[] keyParts)
         {
             var allKeyParts = new List<string> { Constants.AzureAppSettingsPrefix }.Concat(keyParts).ToList();
-            var key = string.Join('.', allKeyParts);
-            return new SettingEntry(key, value.ToString());
+
+            var keys = allKeyParts.Select(f => new KeyPart(f)).ToList();
+            var keyCollection = new KeyPartCollection(keys);
+
+            return new SettingEntry(keyCollection, value.ToString());
         }
     }
 }

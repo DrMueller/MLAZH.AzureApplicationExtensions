@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Servants.Implementation
@@ -17,7 +16,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         {
             var settingEntries = _configRootProxy
                 .GetRootEntries()
-                .Select(f => new SettingEntry(f.Key, f.Value))
+                .Select(f => new SettingEntry(KeyPartCollection.CreateFromString(f.Key), f.Value))
                 .ToList();
 
             var result = new SettingEntryContainer(settingEntries);

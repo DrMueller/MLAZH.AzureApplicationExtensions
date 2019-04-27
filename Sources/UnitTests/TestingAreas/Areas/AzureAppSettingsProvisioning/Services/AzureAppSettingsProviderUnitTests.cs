@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Servants;
@@ -26,41 +27,69 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Azur
         public void Loading_Collections_ComplexObjects_LoadsComplexObjectCollection()
         {
             // Arrange
-            var expectedObjects = new List<ComplexObject>
-            {
-                new ComplexObject
+            const string ExpectedComplexObj1StringValue = "ComplexObjects1 String";
+            const string ExpectedComplexObj1AnotherStringValue = "ComplexObjects1 Another";
+            const string ExpectedComplexObj2StringValue = "ComplexObjects2 String";
+
+            var settings1 = SettingEntryFactory.Create(ExpectedComplexObj1StringValue, nameof(TestSettings.ComplexObjects) + "1", nameof(ComplexObject.StringValue));
+            var settings2 = SettingEntryFactory.Create(ExpectedComplexObj1AnotherStringValue, nameof(TestSettings.ComplexObjects) + "1", nameof(ComplexObject.AnotherStringValue));
+            var settings3 = SettingEntryFactory.Create(ExpectedComplexObj2StringValue, nameof(TestSettings.ComplexObjects) + "2", nameof(ComplexObject.StringValue));
+            var settings4 = SettingEntryFactory.Create("Just as another obj", nameof(TestSettings.MoreComplexObjects) + "1", nameof(ComplexObject.StringValue));
+
+            var settingEntries = new SettingEntryContainer(
+                new List<SettingEntry>
                 {
-                    StringValue = "Hello 1"
-                },
-                new ComplexObject
-                {
-                    StringValue = "Hello 2"
-                }
-            };
+                    settings1,
+                    settings2,
+                    settings3,
+                    settings4
+                });
+
+            _settingEntriesFactory.Setup(f => f.Create()).Returns(settingEntries);
 
             // Act
             var actualSettings = _sut.ProvideSettings();
+            var complexObjects = actualSettings.ComplexObjects;
 
             // Assert
-            CollectionAssert.AreEqual(expectedObjects, actualSettings.ComplexObjects);
+            Assert.IsNotNull(complexObjects);
+            Assert.AreEqual(2, complexObjects.Count);
+            Assert.AreEqual(ExpectedComplexObj1StringValue, complexObjects.ElementAt(0).StringValue);
+            Assert.AreEqual(ExpectedComplexObj1AnotherStringValue, complexObjects.ElementAt(0).AnotherStringValue);
+            Assert.AreEqual(ExpectedComplexObj2StringValue, complexObjects.ElementAt(1).StringValue);
         }
 
         [Test]
         public void Loading_Collections_Strings_LoadsStringsCollection()
         {
             // Arrange
-            var expectedStrings = new List<string>
-            {
-                "String1",
-                "String2",
-                "String3"
-            };
+            const string ExpectedString1 = "String1";
+            const string ExpectedString2 = "String2";
+            const string ExpectedString3 = "String3";
+
+            var settings1 = SettingEntryFactory.Create(ExpectedString1, nameof(TestSettings.Strings) + "11");
+            var settings2 = SettingEntryFactory.Create(ExpectedString2, nameof(TestSettings.Strings) + "12");
+            var settings3 = SettingEntryFactory.Create(ExpectedString3, nameof(TestSettings.Strings) + "13");
+
+            var settingEntries = new SettingEntryContainer(
+                new List<SettingEntry>
+                {
+                    settings1,
+                    settings2,
+                    settings3
+                });
+
+            _settingEntriesFactory.Setup(f => f.Create()).Returns(settingEntries);
 
             // Act
             var actualSettings = _sut.ProvideSettings();
 
             // Assert
-            CollectionAssert.AreEqual(expectedStrings, actualSettings.Strings);
+            Assert.IsNotNull(actualSettings.Strings);
+            Assert.AreEqual(settingEntries.Entries.Count, actualSettings.Strings.Count);
+            Assert.AreEqual(ExpectedString1, actualSettings.Strings.ElementAt(0));
+            Assert.AreEqual(ExpectedString2, actualSettings.Strings.ElementAt(1));
+            Assert.AreEqual(ExpectedString3, actualSettings.Strings.ElementAt(2));
         }
 
         [Test]

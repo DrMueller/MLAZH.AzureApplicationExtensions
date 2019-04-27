@@ -1,11 +1,11 @@
 ﻿namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models
 {
-    public class ComplexSettingEntryContainer
+    public class GroupedSettingEntryContainer
     {
         public string Prefix { get; }
         public SettingEntryContainer SettingEntries { get; }
 
-        public ComplexSettingEntryContainer(string prefix, SettingEntryContainer settingEntries)
+        public GroupedSettingEntryContainer(string prefix, SettingEntryContainer settingEntries)
         {
             Prefix = prefix;
             SettingEntries = settingEntries;

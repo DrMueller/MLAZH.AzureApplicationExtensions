@@ -22,7 +22,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         {
             var settings = new TSettings();
             var settingEntries = _settingEntriesFactory.Create();
-            var mySettingEntries = settingEntries.GetPropertiesByFirstKeyPartWithoutNumber(Constants.AzureAppSettingsPrefix);
+            var mySettingEntries = settingEntries.GetEntriesByFirstKeyPartWithoutNumber(Constants.AzureAppSettingsPrefix);
 
             ProcessSettingEntries(mySettingEntries, settings);
             return settings;
@@ -34,7 +34,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         {
             var objectProps = objectToSet.GetType().GetProperties().ToList();
             var propInfo = objectProps.Single(f => f.Name == settingEntry.PropertyName);
-            propInfo.SetValue(objectToSet, settingEntry.ConvertValue(propInfo.PropertyType));
+            propInfo.SetValue(objectToSet, settingEntry.GetConvertedValue(propInfo.PropertyType));
         }
 
         private static IList AssurePropertyListIsInitialized(string keyPrefix, object objectToProcess)
@@ -59,7 +59,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
         {
             var list = AssurePropertyListIsInitialized(entries.Prefix, objectToProcess);
             var genericType = list.GetType().GetGenericArguments()[0];
-            entries.SettingEntries.Entries.ForEach(f => list.Add(f.ConvertValue(genericType)));
+            entries.SettingEntries.Entries.ForEach(f => list.Add(f.GetConvertedValue(genericType)));
         }
 
         private void ProcessComplexEntry(
@@ -83,17 +83,17 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
                 propInfo.SetValue(objectToProcess, propertyInstance);
             }
 
-            var mySettingEntries = complexEntry.SettingEntries.GetPropertiesByFirstKeyPartWithoutNumber(complexEntry.Prefix);
+            var mySettingEntries = complexEntry.SettingEntries.GetEntriesByFirstKeyPartWithoutNumber(complexEntry.Prefix);
             ProcessSettingEntries(mySettingEntries, propertyInstance);
         }
 
         private void ProcessSettingEntries(SettingEntryContainer settingEntries, object objectToProcess)
         {
             settingEntries
-                .GetSimplePrimitivePropertyEntries()
+                .GetSimplePrimitiveEntries()
                 .ForEach(f => ApplyPropertyValue(f, objectToProcess));
 
-            settingEntries.GetSimpleArrayPropertyEntries()
+            settingEntries.GetSimpleArrayEntries()
                 .ForEach(f => ProcessSimpleArrayEntries(f, objectToProcess));
 
             settingEntries.GetComplexEntries()

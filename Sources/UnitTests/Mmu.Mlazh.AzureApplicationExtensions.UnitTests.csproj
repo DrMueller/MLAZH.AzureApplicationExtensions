@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="TestingAreas\Areas\AzureAppSettingsProvisioning\Models\" />
     <Folder Include="TestingAreas\Areas\FunctionContext\" />
   </ItemGroup>
 

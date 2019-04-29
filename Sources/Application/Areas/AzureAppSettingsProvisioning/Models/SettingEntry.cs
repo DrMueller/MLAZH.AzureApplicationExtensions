@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Mmu.Mlh.LanguageExtensions.Areas.Invariance;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models
 {
@@ -14,11 +15,13 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
 
         public SettingEntry(KeyPartCollection keyParts, string value)
         {
+            Guard.ObjectNotNull(() => keyParts);
+
             _keyParts = keyParts;
             Value = value;
         }
 
-        public object ConvertValue(Type targetType)
+        public object GetConvertedValue(Type targetType)
         {
             if (targetType == typeof(string))
             {

@@ -23,7 +23,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             return result;
         }
 
-        public SettingEntryContainer GetPropertiesByFirstKeyPartWithoutNumber(string firstKeyPart)
+        public SettingEntryContainer GetEntriesByFirstKeyPartWithoutNumber(string firstKeyPart)
         {
             var entries = Entries.Where(f => f.FirstKeyPart.GetValueWithoutTrailingNumbers() == firstKeyPart)
                 .Select(f => f.CreateNextKeyPartLevelEntry())
@@ -32,7 +32,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             return new SettingEntryContainer(entries);
         }
 
-        public IReadOnlyCollection<GroupedSettingEntryContainer> GetSimpleArrayPropertyEntries()
+        public IReadOnlyCollection<GroupedSettingEntryContainer> GetSimpleArrayEntries()
         {
             var colEntries = Entries.Where(f => !f.IsComplex && f.IsCollection)
                 .ToList();
@@ -45,7 +45,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
             return grpedEntries;
         }
 
-        public IReadOnlyCollection<SettingEntry> GetSimplePrimitivePropertyEntries()
+        public IReadOnlyCollection<SettingEntry> GetSimplePrimitiveEntries()
         {
             return Entries.Where(f => !f.IsComplex && !f.IsCollection).ToList();
         }

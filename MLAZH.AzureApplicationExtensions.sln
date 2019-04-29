@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlazh.AzureApplicationE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlazh.AzureApplicationExtensions.UnitTests", "Sources\UnitTests\Mmu.Mlazh.AzureApplicationExtensions.UnitTests.csproj", "{A8DD0012-7778-485C-B839-2A07BC55203F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mmu.Mlh.RestExtensions", "..\..\MyLittleHelpers\RestExtensions\Sources\Application\Mmu.Mlh.RestExtensions.csproj", "{9C58C9E9-1DA8-4A9C-AAF9-B27CC3DB828F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{A8DD0012-7778-485C-B839-2A07BC55203F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8DD0012-7778-485C-B839-2A07BC55203F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8DD0012-7778-485C-B839-2A07BC55203F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C58C9E9-1DA8-4A9C-AAF9-B27CC3DB828F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C58C9E9-1DA8-4A9C-AAF9-B27CC3DB828F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C58C9E9-1DA8-4A9C-AAF9-B27CC3DB828F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C58C9E9-1DA8-4A9C-AAF9-B27CC3DB828F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

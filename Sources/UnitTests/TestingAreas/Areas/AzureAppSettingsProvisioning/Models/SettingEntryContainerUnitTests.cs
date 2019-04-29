@@ -33,7 +33,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Azur
         {
             // Arrange
 
-            HERE
             // Act
             
             // Assert

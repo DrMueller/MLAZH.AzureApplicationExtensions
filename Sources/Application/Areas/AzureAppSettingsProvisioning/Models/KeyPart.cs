@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Mmu.Mlh.LanguageExtensions.Areas.Invariance;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Models
 {
@@ -9,6 +10,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisionin
 
         public KeyPart(string value)
         {
+            Guard.StringNotNullOrEmpty(() => value);
+
             Value = value;
         }
 

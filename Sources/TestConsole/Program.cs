@@ -22,7 +22,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
                 new LoggerMock(),
                 c => container = c);
 
-            container.GetInstance<IConsoleCommandsStartupService>()
+            container
+                .GetInstance<IConsoleCommandsStartupService>()
                 .Start();
         }
     }

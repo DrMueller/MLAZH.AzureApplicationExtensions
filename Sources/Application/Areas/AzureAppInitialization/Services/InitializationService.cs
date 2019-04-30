@@ -15,6 +15,7 @@ using Mmu.Mlazh.AzureApplicationExtensions.Areas.BearerTokens.Services.Implement
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.HttpRequestProxies.Services.Servants;
@@ -93,6 +94,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
                     cfg.For<IHttpRequestProxyFactory>().Use<HttpRequestProxyFactory>().Singleton();
                     cfg.For<IQueryParametersFactory>().Use<QueryParametersFactory>().Singleton();
                     cfg.For<IBearerTokenFactory>().Use<BearerTokenFactory>().Singleton();
+                    cfg.For<IAzureFunctionContext>().Use<AzureFunctionContext>().Transient();
                 });
         }
     }

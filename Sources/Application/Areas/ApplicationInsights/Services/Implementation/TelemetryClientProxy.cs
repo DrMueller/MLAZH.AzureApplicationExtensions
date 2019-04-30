@@ -8,7 +8,7 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Service
     {
         public TelemetryClientProxy(IApplicationInsightsInitializationServant initServant)
         {
-            initServant.AssureApplictionInsightsIsInitialized();
+            &initServant.AssureApplictionInsightsIsInitialized();
         }
 
         public void TrackEvent(string eventName)

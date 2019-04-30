@@ -9,7 +9,7 @@ using Mmu.Mlh.ServiceProvisioning.Areas.Provisioning.Services;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.FunctionContext.Contexts.Services.Implementation
 {
-    public class AzureFunctionContext : IAzureFunctionContext
+    internal class AzureFunctionContext : IAzureFunctionContext
     {
         private readonly IExceptionHandler _exceptionHandler;
         private readonly IHttpRequestProxyFactory _proxyFactory;

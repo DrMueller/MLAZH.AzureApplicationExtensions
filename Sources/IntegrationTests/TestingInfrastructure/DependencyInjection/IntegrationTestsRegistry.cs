@@ -1,6 +1,4 @@
-﻿using Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.Settings.Services;
-using Mmu.Mlazh.AzureApplicationExtensions.IntegrationTests.TestingInfrastructure.Settings;
-using StructureMap;
+﻿using StructureMap;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.IntegrationTests.TestingInfrastructure.DependencyInjection
 {
@@ -14,8 +12,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.IntegrationTests.TestingInfrastru
                     scanner.AssemblyContainingType<IntegrationTestsRegistry>();
                     scanner.WithDefaultConventions();
                 });
-
-            For<IApplicationInsightsSettingsProvider>().Use<TestApplicationInsightsSettingsProvider>();
         }
     }
 }

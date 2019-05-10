@@ -1,6 +1,4 @@
-﻿using Mmu.Mlazh.AzureApplicationExtensions.Infrastructure.Settings.Services;
-using Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.Settings;
-using Mmu.Mlh.ConsoleExtensions.Areas.Commands.Models;
+﻿using Mmu.Mlh.ConsoleExtensions.Areas.Commands.Models;
 using StructureMap;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.DependencyInjection
@@ -16,8 +14,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole.Infrastructure.Depend
                     scanner.AddAllTypesOf<IConsoleCommand>();
                     scanner.WithDefaultConventions();
                 });
-
-            For<IApplicationInsightsSettingsProvider>().Use<SettingsProvider>().Singleton();
         }
     }
 }

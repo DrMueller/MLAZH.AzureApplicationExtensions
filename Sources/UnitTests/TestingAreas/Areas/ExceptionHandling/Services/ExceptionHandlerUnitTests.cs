@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services.Implementation;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -13,13 +13,13 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Exce
     public class ExceptionHandlerUnitTests
     {
         private ExceptionHandler _sut;
-        private Mock<ITelemetryClientProxy> _telemetryClientProxyMock;
+        private Mock<ILoggingService> _loggingServiceMock;
 
         [SetUp]
         public void Align()
         {
-            _telemetryClientProxyMock = new Mock<ITelemetryClientProxy>();
-            _sut = new ExceptionHandler(_telemetryClientProxyMock.Object);
+            _loggingServiceMock = new Mock<ILoggingService>();
+            _sut = new ExceptionHandler(_loggingServiceMock.Object);
         }
 
         [Test]
@@ -33,8 +33,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Exce
             await _sut.HandleActionExceptionAsync(exception);
 
             // Assert
-            _telemetryClientProxyMock.Verify(f => f.TrackException(innerException), Times.Once);
-            _telemetryClientProxyMock.Verify(f => f.TrackException(exception), Times.Once);
+            _loggingServiceMock.Verify(f => f.LogError(innerException), Times.Once);
+            _loggingServiceMock.Verify(f => f.LogError(exception), Times.Once);
         }
 
         [Test]
@@ -67,8 +67,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.UnitTests.TestingAreas.Areas.Exce
             await _sut.HandleFunctionExceptionAsync(exception);
 
             // Assert
-            _telemetryClientProxyMock.Verify(f => f.TrackException(innerException), Times.Once);
-            _telemetryClientProxyMock.Verify(f => f.TrackException(exception), Times.Once);
+            _loggingServiceMock.Verify(f => f.LogError(innerException), Times.Once);
+            _loggingServiceMock.Verify(f => f.LogError(exception), Times.Once);
         }
     }
 }

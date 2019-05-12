@@ -18,8 +18,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.TestConsole
 
             InitializationService.Initialize(
                 containerConfig,
-                ExecutionContextFactory.CreateDefault(),
                 new LoggerMock(),
+                ExecutionContextFactory.CreateDefault().FunctionAppDirectory,
                 c => container = c);
 
             container

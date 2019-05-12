@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services;
@@ -28,13 +27,13 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
     {
         public static IAzureFunctionContext Initialize(
             ContainerConfiguration containerConfig,
-            ExecutionContext executionContext,
             ILogger logger,
+            string localSettingsJsonPath,
             Action<IContainer> afterInitializationCallback = null,
             Action provideDependencenciesCallback = null)
         {
             var container = InitializeContainer(containerConfig, provideDependencenciesCallback);
-            InitializeAppSettings(container, executionContext.FunctionAppDirectory);
+            InitializeAppSettings(container, localSettingsJsonPath);
             InitializeLogging(container, logger);
             InitializeServices(container);
 
@@ -43,10 +42,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
             return context;
         }
 
-        private static void InitializeAppSettings(IContainer container, string appDirectory)
+        private static void InitializeAppSettings(IContainer container, string localSettingsJsonPath)
         {
             var configRoot = new ConfigurationBuilder()
-                .SetBasePath(appDirectory)
+                .SetBasePath(localSettingsJsonPath)
                 .AddJsonFile("local.settings.json", true, true)
                 .AddEnvironmentVariables()
                 .Build();

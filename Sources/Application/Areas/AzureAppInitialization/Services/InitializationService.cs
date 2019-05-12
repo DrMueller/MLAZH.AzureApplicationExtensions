@@ -1,10 +1,7 @@
 ﻿using System;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Implementation;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Servants;
@@ -31,13 +28,13 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
     {
         public static IAzureFunctionContext Initialize(
             ContainerConfiguration containerConfig,
+            ExecutionContext executionContext,
             ILogger logger,
-            string localSettingsJsonPath,
             Action<IContainer> afterInitializationCallback = null,
             Action provideDependencenciesCallback = null)
         {
             var container = InitializeContainer(containerConfig, provideDependencenciesCallback);
-            InitializeAppSettings(container, localSettingsJsonPath);
+            InitializeAppSettings(container, executionContext.FunctionAppDirectory);
             InitializeLogging(container, logger);
             InitializeServices(container);
 
@@ -46,10 +43,10 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
             return context;
         }
 
-        private static void InitializeAppSettings(IContainer container, string localSettingsJsonPath)
+        private static void InitializeAppSettings(IContainer container, string appDirectory)
         {
             var configRoot = new ConfigurationBuilder()
-                .SetBasePath(localSettingsJsonPath)
+                .SetBasePath(appDirectory)
                 .AddJsonFile("local.settings.json", true, true)
                 .AddEnvironmentVariables()
                 .Build();
@@ -88,8 +85,6 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
                 cfg =>
                 {
                     cfg.For<IExceptionHandler>().Use<ExceptionHandler>().Singleton();
-                    cfg.For<IApplicationInsightsInitializationServant>().Use<ApplicationInsightsInitializationServant>().Singleton();
-                    cfg.For<ITelemetryClientProxy>().Use<TelemetryClientProxy>().Singleton();
                     cfg.For<IHttpRequestProxyFactory>().Use<HttpRequestProxyFactory>().Singleton();
                     cfg.For<IQueryParametersFactory>().Use<QueryParametersFactory>().Singleton();
                     cfg.For<IBearerTokenFactory>().Use<BearerTokenFactory>().Singleton();

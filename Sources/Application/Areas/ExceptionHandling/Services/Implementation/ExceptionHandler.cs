@@ -2,19 +2,19 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Models;
-using Mmu.Mlazh.AzureApplicationExtensions.Areas.Logging;
 using Newtonsoft.Json;
 
 namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services.Implementation
 {
     internal class ExceptionHandler : IExceptionHandler
     {
-        private readonly ILoggingService _loggingService;
+        private readonly ITelemetryClientProxy _telemetryClientProxy;
 
-        public ExceptionHandler(ILoggingService loggingService)
+        public ExceptionHandler(ITelemetryClientProxy telemetryClientProxy)
         {
-            _loggingService = loggingService;
+            _telemetryClientProxy = telemetryClientProxy;
         }
 
         public Task HandleActionExceptionAsync(Exception exception)
@@ -49,8 +49,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.ExceptionHandling.Services.
                 innerException = innerException.InnerException;
             }
 
-            _loggingService.LogError(exception);
-            _loggingService.LogError(innerException);
+            _telemetryClientProxy.TrackException(exception);
+            _telemetryClientProxy.TrackException(innerException);
             return innerException;
         }
     }

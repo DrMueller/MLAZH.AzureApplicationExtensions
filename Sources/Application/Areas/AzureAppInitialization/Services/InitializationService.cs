@@ -1,6 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Implementation;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants;
+using Mmu.Mlazh.AzureApplicationExtensions.Areas.ApplicationInsights.Services.Servants.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Implementation;
 using Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppSettingsProvisioning.Services.Servants;
@@ -84,6 +88,8 @@ namespace Mmu.Mlazh.AzureApplicationExtensions.Areas.AzureAppInitialization.Serv
                 cfg =>
                 {
                     cfg.For<IExceptionHandler>().Use<ExceptionHandler>().Singleton();
+                    cfg.For<IApplicationInsightsInitializationServant>().Use<ApplicationInsightsInitializationServant>().Singleton();
+                    cfg.For<ITelemetryClientProxy>().Use<TelemetryClientProxy>().Singleton();
                     cfg.For<IHttpRequestProxyFactory>().Use<HttpRequestProxyFactory>().Singleton();
                     cfg.For<IQueryParametersFactory>().Use<QueryParametersFactory>().Singleton();
                     cfg.For<IBearerTokenFactory>().Use<BearerTokenFactory>().Singleton();
